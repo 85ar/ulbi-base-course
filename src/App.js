@@ -1,7 +1,6 @@
 import { useState } from "react";
+import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
-import MyInput from "./components/UI/input/MyInput";
 import "./styles/App.css";
 
 function App() {
@@ -23,26 +22,22 @@ function App() {
     },
   ]);
 
-  const [title, setTitle] = useState("");
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
+  };
 
-  const addNewPost = (e) => {
-    e.preventDefault();
-    console.log(title);
+  const removePost = (post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
   };
 
   return (
     <div className="App">
-      <form>
-        <MyInput
-          type="text"
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-          placeholder="Название поста"
-        />
-        <MyInput type="text" placeholder="Заголовок поста" />
-        <MyButton onClick={addNewPost}>Создать пост</MyButton>
-      </form>
-      <PostList posts={posts} title="Посты про JS" />
+      <PostForm create={createPost} />
+      {posts.length ? (
+        <PostList remove={removePost} posts={posts} title="Посты про JS" />
+      ) : (
+        <h1 style={{ textAlign: "center" }}>Посты не найдены!</h1>
+      )}
     </div>
   );
 }
